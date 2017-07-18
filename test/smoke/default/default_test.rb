@@ -12,7 +12,34 @@ unless os.windows?
   end
 end
 
-# This is an example test, replace it with your own test.
-describe port(80), :skip do
-  it { should_not be_listening }
+describe file('/tmp/default_action') do
+  it { should exist }
+end
+
+['net-tools', 'httpd'].each do |pkg|
+  describe package(pkg) do
+    it { should be_installed }
+  end
+end
+
+describe package('samba') do
+  it { should be_installed }
+end
+
+describe package('vim-enhanced') do
+  it { should be_installed }
+end
+
+describe service('httpd') do
+  it { should be_enabled }
+  it { should be_running }
+end
+
+describe user('webadmin') do
+    it { should exist }
+    its('group') { should eq 'developers' }
+end
+
+describe group('developers') do
+    it { should exist }
 end
